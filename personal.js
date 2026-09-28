@@ -24,4 +24,4 @@ async function editMap(){panel(`<div class="step">KARTA</div><h1>Bygg 5×5-karta
 <button class="btn" onclick="load()">← Tillbaka</button>`)}
 async function toggleSpot(id){let x=spots.find(s=>s.id===id);if(!x)return;let type=x.type==="blocked"?"parking":"blocked";
 let {error}=await sb.from("parking_spots").update({type}).eq("id",id);if(error)return alert(error.message);load()}
-load();setInterval(load,5000);
+load();
