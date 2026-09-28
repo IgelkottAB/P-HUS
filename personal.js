@@ -1,4 +1,24 @@
-```js
+
+som **sista raden**.
+
+Det är Markdown-kodblock som råkat hamna inne i själva JavaScript-filen. Webbläsaren försöker då tolka `````js````` som JavaScript och kraschar direkt. Det förklarar mycket väl varför du bara får **loggan + "Personal"**. :contentReference[oaicite:0]{index=0}
+
+Jag ser också att `config.js` nu faktiskt har **rätt URL**, precis som du sa. :contentReference[oaicite:1]{index=1} Och `personal.html` laddar filerna i rätt ordning. :contentReference[oaicite:2]{index=2}
+
+Så jag skulle **inte ändra Supabase eller HTML alls**.
+
+### Här är den korrigerade `personal.js`
+
+Den här versionen har:
+- bort Markdown-raderna som förstör JavaScriptet
+- ingen automatisk `setInterval`
+- kartbyggaren stannar kvar
+- klick på en parkeringsruta stannar kvar i kartbyggaren
+- vanlig personalsida fungerar fortfarande
+- `Tillbaka` fungerar
+- Supabase-anropen är kvar
+
+:::writing{variant="document" id="73164" title="Korrigerad personal.js"}
 const { createClient } = supabase;
 
 const sb = createClient(
@@ -29,7 +49,6 @@ function panel(x) {
 }
 
 async function load() {
-  // Hämta parkeringsplatser
   const a = await sb
     .from("parking_spots")
     .select("*")
@@ -45,7 +64,6 @@ async function load() {
 
   spots = a.data || [];
 
-  // Hämta parkeringar
   const b = await sb
     .from("parking_sessions")
     .select("*,parking_spots(label)")
@@ -62,7 +80,6 @@ async function load() {
 
   sessions = b.data || [];
 
-  // Om kartbyggaren är öppen ska vi stanna där
   if (mapMode) {
     renderMap();
   } else {
@@ -163,7 +180,7 @@ function render() {
     </div>
 
     <p class="small muted">
-      Uppdateras automatiskt var 5:e sekund.
+      Automatisk uppdatering är avstängd medan vi bygger kartan.
     </p>
   `);
 }
@@ -230,16 +247,15 @@ async function toggleSpot(id) {
     return;
   }
 
-  // Uppdatera bara kartan – gå INTE tillbaka till personalsidan
   x.type = type;
+
   renderMap();
 }
 
-// Första laddningen
 load();
+:::
 
-// Automatisk uppdatering.
-// Den körs fortfarande var 5:e sekund,
-// men kartbyggaren stängs aldrig när den körs.
-// Automatisk uppdatering avstängd
-```
+**Viktigt:** När du klistrar in den i GitHub ska första raden vara:
+
+```text
+const { createClient } = supabase;
