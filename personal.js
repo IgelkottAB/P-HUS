@@ -241,7 +241,5 @@ load();
 // Automatisk uppdatering.
 // Den körs fortfarande var 5:e sekund,
 // men kartbyggaren stängs aldrig när den körs.
-setInterval(() => {
-  load();
-}, 5000);
+// Automatisk uppdatering avstängd
 ```
